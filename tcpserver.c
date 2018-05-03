@@ -22,8 +22,10 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+
 #define  PUERTO   12346	     /* numero puerto arbitrario */
-int primo(int pet);
+int evitarDuplicadoVotos(struct voto quienVota);
+
 int  		     resp;           /* parametro de entrada */
 int   		     pet;            /* parametro de salida  */
 int                  sd, sd_actual;  /* descriptores de sockets */
@@ -33,8 +35,27 @@ int 		     divisores,j;
 /*  procedimiento de aborte del servidor, si llega una senal SIGINT */
 /* ( <ctrl> <c> ) se cierra el socket y se aborta el programa       */  
 
+struct voto{
+    int candidato;
+    char votante[15];	
+}voto;
+struct candidato{
+    char nombreCandidato;
+    int votos;
+}candidato;
+struct votante{
+    char votante[15];
+    int avotado;
+}votante;
+struct opcion{
+    int opcion;
+    struct voto votoN;
+}opcion;
 
-
+struct voto votoReceptor;
+struct candidato candidatos[5];
+struct votante votantes[20];
+struct opcion respuesta;
 
 void aborta()
 {
@@ -100,17 +121,17 @@ int main()
             //else resp='i';
             //////////////////////////////////////////////////////////////////////////////
             //Configuración de opciones
-            if(respuesta->opcion==1){//si la opcion es igual a 1. se llevará acabo el voto
-                if(evitarDuplicadoVotos(respuesta->votoN)==1){//puede votar
-                    
+            if(respuesta.opcion==1){//si la opcion es igual a 1. se llevará acabo el voto
+                if(evitarDuplicadoVotos(respuesta.votoN)==1){//puede votar
+
                 }
-            }else if(respuesta-opcion==2){//si la opcion es igual a 2. se imprimirán los resultados de la votación.
-                
-            }else if(respuesta-opcion==3){//si la opcion es igual a 3. se terminará el proceso.
-                   
+            }else if(respuesta.opcion==2){//si la opcion es igual a 2. se imprimirán los resultados de la votación.
+
+            }else if(respuesta.opcion==3){//si la opcion es igual a 3. se terminará el proceso.
+
             }
-            
-            
+
+
 
 
 
@@ -127,7 +148,7 @@ int main()
             /////////////////////////////////////////////////////////////////////
 
             /* enviando la respuesta del servicio */
-            if ( send(sd_actual, &resp, sizeof(resp), 0) == -1) {
+            if ( send(sd_actual, &respuesta, sizeof(resp), 0) == -1) {
                 perror("send");
                 exit(1);
             }
@@ -144,31 +165,13 @@ int main()
     return 0;
 }
 
-int primo(int pet){
-    int j=0;
-    int divisores=0;	
-    int resp=0;
 
-    divisores=0;
-    for(j=0;j<=pet;j++){
-        printf("----%d",j);
-        if(pet % j==0){
-            divisores++;
-        }
-    }
-    if(divisores>=1){
-        resp=-1;
-    }else{
-        resp=1;
-    }
-    return resp;
-}
 
-int evitarDuplicadoVotos(voto quienVota){
+int evitarDuplicadoVotos(struct voto quienVota){
     int i=0;
     int resp=99;
     for(i=0;i<votantes.length();i++){
-        if(quienVota->votante.strcmp(votante[i]->votante)){
+        if(quienVota.votante.strcmp(votante[i].votante)){
             //ya votó. no puede votar de nuevo
             resp=0;
         }else{
@@ -179,20 +182,20 @@ int evitarDuplicadoVotos(voto quienVota){
     return resp;
 }
 
-void emitirVoto(voto votoEmitir){
+void emitirVoto(struct voto votoEmitir){
     int i=99;
     for(i=0;i<candidatos.length();i++){
-        if(candidatos->nombreCandidato.strcmp(votoEmitir->candidato)){
-            candidatos->votos++;
-            
+        if(candidatos.nombreCandidato.strcmp(votoEmitir.candidato)){
+            candidatos.votos++;
+
         }
     }
 }
 
-void avotado(votante vtnt){
+void avotado(struct votante vtnt){
     int i=0;
     for(i=0;i<votantes.length();i++){
-        if()
+
     }
 }
 
