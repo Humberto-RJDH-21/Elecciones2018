@@ -15,6 +15,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <signal.h>
 #include <sys/types.h>
@@ -24,8 +25,9 @@
 
 
 #define  PUERTO   12346	     /* numero puerto arbitrario */
-int evitarDuplicadoVotos(struct voto quienVota);
-
+int evitarDuplicadoVotos(char quienVota[15]);
+void emitirVoto(char votoEmitir[50]);
+//void avotado(struct votante vtnt);
 int  		     resp;           /* parametro de entrada */
 int   		     pet;            /* parametro de salida  */
 int                  sd, sd_actual;  /* descriptores de sockets */
@@ -40,7 +42,7 @@ struct voto{
     char votante[15];	
 }voto;
 struct candidato{
-    char nombreCandidato;
+    char nombre[150];
     int votos;
 }candidato;
 struct votante{
@@ -57,6 +59,13 @@ struct candidato candidatos[5];
 struct votante votantes[20];
 struct opcion respuesta;
 
+
+
+//
+/*
+*/
+
+
 void aborta()
 {
     printf("....abortando el proceso servidor \n");
@@ -67,6 +76,19 @@ void aborta()
 
 int main()
 {
+    strcpy(candidatos[0].nombre, "1.-Andres Manuel Lopez Obrador \n2.-Margarita Zavala\n3.-Ricardo Anaya\n4.-Jose Antonio Meade Curibeña\n5.-El bronco");
+    strcpy(candidatos[1].nombre,"Margarita Zavala");
+    candidatos[1].votos=0;
+    strcpy(candidatos[2].nombre,"Ricardo Anaya");
+    candidatos[2].votos=0;
+    strcpy(candidatos[3].nombre,"Jose Antonio Meade Curibeña");
+    candidatos[3].votos=0;
+    strcpy(candidatos[4].nombre,"El bronco");
+    candidatos[4].votos=0;
+
+
+
+    candidatos[0].votos=0;
     /* activando la senal SIGINT */
     signal(SIGINT, aborta);     
 
@@ -108,7 +130,7 @@ int main()
         /* se crea un hijo para atender la conexion */
         if ( fork() == 0) { 
             /* tomar un mensaje del cliente */
-            if ( recv(sd_actual, &respuesta, sizeof(pet), 0) == -1) {
+            if ( recv(sd_actual, &respuesta, sizeof(respuesta), 0) == -1) {
                 perror("recv");
                 exit(1);
             }
@@ -117,38 +139,21 @@ int main()
             /* proporcionando el servicio */
             //printf("pet-%d",pet);
             //resp=primo(pet);
+            printf("candidato %s",respuesta.votoN.votante);
             //printf("pet-%d",pet);        //if ((pet % 2) == 0) resp='p';
             //else resp='i';
             //////////////////////////////////////////////////////////////////////////////
             //Configuración de opciones
             if(respuesta.opcion==1){//si la opcion es igual a 1. se llevará acabo el voto
-                if(evitarDuplicadoVotos(respuesta.votoN)==1){//puede votar
+                /*if(evitarDuplicadoVotos(respuesta.votoN.votante)==1){//puede votar
 
-                }
-            }else if(respuesta.opcion==2){//si la opcion es igual a 2. se imprimirán los resultados de la votación.
-
-            }else if(respuesta.opcion==3){//si la opcion es igual a 3. se terminará el proceso.
+                }*/
 
             }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            /////////////////////////////////////////////////////////////////////
-
             /* enviando la respuesta del servicio */
-            if ( send(sd_actual, &respuesta, sizeof(resp), 0) == -1) {
+            if ( send(sd_actual, &candidatos, sizeof(candidatos), 0) == -1) {
                 perror("send");
                 exit(1);
             }
@@ -165,13 +170,11 @@ int main()
     return 0;
 }
 
-
-
-int evitarDuplicadoVotos(struct voto quienVota){
+int evitarDuplicadoVotos(char quienVota[15]){
     int i=0;
     int resp=99;
-    for(i=0;i<votantes.length();i++){
-        if(quienVota.votante.strcmp(votante[i].votante)){
+    for(i=0;i<sizeof(votantes);i++){
+        if(strcmp(quienVota,votantes[i].votante)==0){
             //ya votó. no puede votar de nuevo
             resp=0;
         }else{
@@ -181,21 +184,21 @@ int evitarDuplicadoVotos(struct voto quienVota){
     }
     return resp;
 }
-
-void emitirVoto(struct voto votoEmitir){
+/*
+void emitirVoto(char votoEmitir[50]){
     int i=99;
     for(i=0;i<candidatos.length();i++){
-        if(candidatos.nombreCandidato.strcmp(votoEmitir.candidato)){
+        if(strcmp(candidatos.nombreCandidato,votoEmitir->candidato)){
             candidatos.votos++;
 
         }
     }
-}
-
-void avotado(struct votante vtnt){
+}*/
+/*
+void avotado( vtnt){
     int i=0;
     for(i=0;i<votantes.length();i++){
 
     }
-}
+}*/
 

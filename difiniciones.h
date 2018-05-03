@@ -8,7 +8,7 @@ typedef struct voto{
     char votante[15];	
 };
 typedef struct candidato{
-    char nombreCandidato;
+    char nombreCandidato[150];
     int votos;
 };
 typedef struct votante{

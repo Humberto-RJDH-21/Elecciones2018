@@ -13,6 +13,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -20,6 +21,24 @@
 #include <netdb.h>
 
 #define  PUERTO    12346   /* numero puerto arbitrario */
+typedef struct voto{
+    int candidato;
+    char votante[15];	
+}voto;
+struct opcion{
+    int opcion;
+    struct voto votoN;
+}opcion;
+
+typedef struct candidato{
+    char nombre[150];
+    int votos;
+}candidato;
+
+
+struct candidato respuesta;
+struct opcion peticion;
+struct voto votoenv;
 
 int main(int argc, char *argv[])
 {
@@ -62,23 +81,26 @@ int main(int argc, char *argv[])
     }
 
     /* enviar mensaje al PUERTO del  servidor en la maquina HOST */
-    pet = atoi(argv[2]); 
-    if ( send(sd, &pet, sizeof(pet), 0) == -1 ) {
+    votoenv.candidato=1;
+    strcpy( votoenv.votante,"Humberto");
+   
+    peticion.opcion = atoi(argv[2]); 
+    peticion.votoN=votoenv;
+    if ( send(sd, &peticion, sizeof(peticion), 0) == -1 ) {
         perror("send");
         exit(1);
     }
 
     /* esperar por la respuesta */
-    if ( recv(sd, &resp, sizeof(resp), 0) == -1 ) {
+    if ( recv(sd, &respuesta, sizeof(respuesta), 0) == -1 ) {
         perror("recv");
         exit(1);
     }
-    printf("ref");
-    /* imprimir los resultados */
-    printf("El numero %d es ",pet );
-    if (resp == 1) printf("primo \n");
-    else printf("no primo \n");
-
+    printf("Candidatos disponibles\n");
+    printf("\n\n-----------------------------------------------------------------\n");
+    printf("%s\n",respuesta.nombre);
+    printf("\n\n-----------------------------------------------------------------\n");
+    printf("Escriba el número del candidato por el cual desea votar\n");
     /* cerrando el socket */
     close(sd);
 
