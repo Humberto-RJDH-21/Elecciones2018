@@ -21,6 +21,9 @@
 #include <netdb.h>
 
 #define  PUERTO    12346   /* numero puerto arbitrario */
+int cand;
+int op;
+char votante[12];
 typedef struct voto{
     int candidato;
     char votante[15];	
@@ -36,7 +39,7 @@ typedef struct candidato{
 }candidato;
 
 
-struct candidato respuesta;
+struct candidato respuesta[5];
 struct opcion peticion;
 struct voto votoenv;
 
@@ -50,13 +53,14 @@ int main(int argc, char *argv[])
     char                    *host;     /* nombre del host */
 
     /* verificando el paso de parametros */
-    if ( argc != 3) {
-        fprintf(stderr,"Error uso: %s <host> <numero> \n",argv[0]);
+    if ( argc != 4) {
+        fprintf(stderr,"Error uso: %s <host> <Matrícula del votante/Administrador> <numero> \n",argv[0]);
         exit(1);
     }
     /* tomando el nombre del host de los argumentos de la linea de comandos */ 
     host = argv[1];
-
+    votante=argv[2];
+    //op=atoi(argv[3]);
     /* encontrando todo lo referente acerca de la maquina host */
     if ( (hp = gethostbyname(host)) == 0) {
         perror("gethosbyname");
@@ -80,27 +84,61 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    /* enviar mensaje al PUERTO del  servidor en la maquina HOST */
-    votoenv.candidato=1;
-    strcpy( votoenv.votante,"Humberto");
-   
-    peticion.opcion = atoi(argv[2]); 
-    peticion.votoN=votoenv;
-    if ( send(sd, &peticion, sizeof(peticion), 0) == -1 ) {
-        perror("send");
-        exit(1);
-    }
+
 
     /* esperar por la respuesta */
     if ( recv(sd, &respuesta, sizeof(respuesta), 0) == -1 ) {
         perror("recv");
         exit(1);
     }
+    UNO:
     printf("Candidatos disponibles\n");
     printf("\n\n-----------------------------------------------------------------\n");
-    printf("%s\n",respuesta.nombre);
+    printf("1.-Andres Manuel Lopez Obrador");
+    printf("2.-Margarita Zavala");
+    printf("3.-Ricardo Anaya");
+    printf("4.-Jose Antonio Meade Curibeña");
+    printf("5.-El bronco");
+
     printf("\n\n-----------------------------------------------------------------\n");
     printf("Escriba el número del candidato por el cual desea votar\n");
+    scanf("%d",&cand);
+
+    if(0<cand&&cand<5){
+        switch(cand){
+            case 1:
+                printf("A elegido votar por: AMLO\n");
+                /* enviar mensaje al PUERTO del  servidor en la maquina HOST */
+                votoenv.candidato=1;
+                strcpy( votoenv.votante,votante);
+
+                peticion.opcion = atoi(argv[3]); 
+                peticion.votoN=votoenv;
+                if ( send(sd, &peticion, sizeof(peticion), 0) == -1 ) {
+                    perror("send");
+                    exit(1);
+                }
+                break;
+            case 2:
+                printf("A elegido votar por: Margarita Zavala\n");
+                break;
+            case 3:
+                printf("A elegido votar por: Ricardo Anaya\n");
+                break;
+            case 4:
+                printf("A elegido votar por: Jose Antonio Meade\n");
+                break;
+            case 5:
+                printf("A elegido votar por: El bronco\n");
+                break;
+            default:
+                goto UNO;
+                break;
+        }
+    }else{
+        system("clear");
+        goto UNO;
+    }
     /* cerrando el socket */
     close(sd);
 

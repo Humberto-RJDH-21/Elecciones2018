@@ -76,14 +76,14 @@ void aborta()
 
 int main()
 {
-    strcpy(candidatos[0].nombre, "1.-Andres Manuel Lopez Obrador \n2.-Margarita Zavala\n3.-Ricardo Anaya\n4.-Jose Antonio Meade Curibeña\n5.-El bronco");
-    strcpy(candidatos[1].nombre,"Margarita Zavala");
+    strcpy(candidatos[0].nombre, "1.-Andres Manuel Lopez Obrador");
+    strcpy(candidatos[1].nombre,"2.-Margarita Zavala");
     candidatos[1].votos=0;
-    strcpy(candidatos[2].nombre,"Ricardo Anaya");
+    strcpy(candidatos[2].nombre,"3.-Ricardo Anaya");
     candidatos[2].votos=0;
-    strcpy(candidatos[3].nombre,"Jose Antonio Meade Curibeña");
+    strcpy(candidatos[3].nombre,"4.-Jose Antonio Meade Curibeña");
     candidatos[3].votos=0;
-    strcpy(candidatos[4].nombre,"El bronco");
+    strcpy(candidatos[4].nombre,"5.-El bronco");
     candidatos[4].votos=0;
 
 
