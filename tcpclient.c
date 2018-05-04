@@ -20,10 +20,10 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-#define  PUERTO    12346   /* numero puerto arbitrario */
+#define  PUERTO    12345   /* numero puerto arbitrario */
 int cand;
 int op;
-char votante[12];
+char votante[11];
 typedef struct voto{
     int candidato;
     char votante[15];	
@@ -53,13 +53,16 @@ int main(int argc, char *argv[])
     char                    *host;     /* nombre del host */
 
     /* verificando el paso de parametros */
-    if ( argc != 4) {
-        fprintf(stderr,"Error uso: %s <host> <Matrícula del votante/Administrador> <numero> \n",argv[0]);
+    if ( argc != 3) {
+        fprintf(stderr,"Error uso: %s <host> <numero> \n",argv[0]);
         exit(1);
     }
     /* tomando el nombre del host de los argumentos de la linea de comandos */ 
     host = argv[1];
-    votante=argv[2];
+    //votante= (char*) malloc(11);
+    printf("Escriba su matrícula para continuar\n");
+    fgets(votante, sizeof(votante), stdin);
+    printf("Votante: %s",votante);
     //op=atoi(argv[3]);
     /* encontrando todo lo referente acerca de la maquina host */
     if ( (hp = gethostbyname(host)) == 0) {
@@ -94,11 +97,11 @@ int main(int argc, char *argv[])
     UNO:
     printf("Candidatos disponibles\n");
     printf("\n\n-----------------------------------------------------------------\n");
-    printf("1.-Andres Manuel Lopez Obrador");
-    printf("2.-Margarita Zavala");
-    printf("3.-Ricardo Anaya");
-    printf("4.-Jose Antonio Meade Curibeña");
-    printf("5.-El bronco");
+    printf("1.-Andres Manuel Lopez Obrador\n");
+    printf("2.-Margarita Zavala\n");
+    printf("3.-Ricardo Anaya\n");
+    printf("4.-Jose Antonio Meade Curibeña\n");
+    printf("5.-El bronco\n");
 
     printf("\n\n-----------------------------------------------------------------\n");
     printf("Escriba el número del candidato por el cual desea votar\n");
@@ -110,9 +113,8 @@ int main(int argc, char *argv[])
                 printf("A elegido votar por: AMLO\n");
                 /* enviar mensaje al PUERTO del  servidor en la maquina HOST */
                 votoenv.candidato=1;
-                strcpy( votoenv.votante,votante);
-
-                peticion.opcion = atoi(argv[3]); 
+                //strcpy( votoenv.votante,votante);
+                peticion.opcion = atoi(argv[2]);
                 peticion.votoN=votoenv;
                 if ( send(sd, &peticion, sizeof(peticion), 0) == -1 ) {
                     perror("send");

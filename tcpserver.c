@@ -24,7 +24,7 @@
 #include <netdb.h>
 
 
-#define  PUERTO   12346	     /* numero puerto arbitrario */
+#define  PUERTO   12345	     /* numero puerto arbitrario */
 int evitarDuplicadoVotos(char quienVota[15]);
 void emitirVoto(char votoEmitir[50]);
 //void avotado(struct votante vtnt);
