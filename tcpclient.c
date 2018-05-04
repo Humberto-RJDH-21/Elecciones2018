@@ -1,6 +1,6 @@
 /*
    Nombre Archivo: tcpclient.c
-   Archivos relacionados: tcpserver.c 
+   Archivos relacionados: tcpserver.c
    Fecha: enero 2007
    Compilacion: cc tcpclient.c -o tcpclient
    Ejecucion: tcpclient <host> <numero>
@@ -20,13 +20,13 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-#define  PUERTO    12345   /* numero puerto arbitrario */
+#define  PUERTO    12346   /* numero puerto arbitrario */
 int cand;
 int op;
 char votante[11];
 typedef struct voto{
     int candidato;
-    char votante[15];	
+    char votante[15];
 }voto;
 struct opcion{
     int opcion;
@@ -57,12 +57,12 @@ int main(int argc, char *argv[])
         fprintf(stderr,"Error uso: %s <host> <numero> \n",argv[0]);
         exit(1);
     }
-    /* tomando el nombre del host de los argumentos de la linea de comandos */ 
+    /* tomando el nombre del host de los argumentos de la linea de comandos */
     host = argv[1];
     //votante= (char*) malloc(11);
-    printf("Escriba su matrícula para continuar\n");
-    fgets(votante, sizeof(votante), stdin);
-    printf("Votante: %s",votante);
+    //printf("Escriba su matrícula para continuar\n");
+    //fgets(votante, sizeof(votante), stdin);
+    //printf("Votante: %s",votante);
     //op=atoi(argv[3]);
     /* encontrando todo lo referente acerca de la maquina host */
     if ( (hp = gethostbyname(host)) == 0) {
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     /* llenar la estructura de direcciones con la informacion del host */
     pin.sin_family = AF_INET;
     pin.sin_addr.s_addr = ((struct in_addr *) (hp->h_addr))->s_addr;
-    pin.sin_port = htons(PUERTO);                    
+    pin.sin_port = htons(PUERTO);
 
     /* obtencion de un socket tipo internet */
     if ( (sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {

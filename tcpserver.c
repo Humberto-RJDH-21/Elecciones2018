@@ -1,6 +1,6 @@
 /*
    Nombre Archivo: tcpserver.c
-   Archivos relacionados: tcpclient.c 
+   Archivos relacionados: tcpclient.c
    Fecha: enero 2007
    Compilacion: cc tcpserver.c -o tcpserver
    Ejecucion: tcpserver &
@@ -24,7 +24,7 @@
 #include <netdb.h>
 
 
-#define  PUERTO   12345	     /* numero puerto arbitrario */
+#define  PUERTO   12346	     /* numero puerto arbitrario */
 int evitarDuplicadoVotos(char quienVota[15]);
 void emitirVoto(char votoEmitir[50]);
 //void avotado(struct votante vtnt);
@@ -35,11 +35,11 @@ int                  addrlen;        /* lomgitud direcciones */
 struct sockaddr_in   sind, pin;      /* direcciones sockets servidor y cliente */
 int 		     divisores,j;
 /*  procedimiento de aborte del servidor, si llega una senal SIGINT */
-/* ( <ctrl> <c> ) se cierra el socket y se aborta el programa       */  
+/* ( <ctrl> <c> ) se cierra el socket y se aborta el programa       */
 
 struct voto{
     int candidato;
-    char votante[15];	
+    char votante[15];
 }voto;
 struct candidato{
     char nombre[150];
@@ -90,7 +90,7 @@ int main()
 
     candidatos[0].votos=0;
     /* activando la senal SIGINT */
-    signal(SIGINT, aborta);     
+    signal(SIGINT, aborta);
 
     /* obtencion de un socket tipo internet */
     if ( (sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -128,7 +128,7 @@ int main()
         }
 
         /* se crea un hijo para atender la conexion */
-        if ( fork() == 0) { 
+        if ( fork() == 0) {
             /* tomar un mensaje del cliente */
             if ( recv(sd_actual, &respuesta, sizeof(respuesta), 0) == -1) {
                 perror("recv");
@@ -158,12 +158,12 @@ int main()
                 exit(1);
             }
             /* cerrando el canal privado de comunicacion */
-            close(sd_actual); 
+            close(sd_actual);
             /* termina ejecucion proceso hijo */
             exit(0);
         }
     }
-    /* cerrando el canal de conexion */ 
+    /* cerrando el canal de conexion */
     close(sd);
 
     /* adios, recordemos que el main es una funcion */
